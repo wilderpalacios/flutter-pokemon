@@ -44,7 +44,53 @@ class _DetailScreenState extends State<DetailScreen> {
       future: _detailFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+          final color = TypeChip.colorForType(widget.pokemon.type);
+          final size = MediaQuery.of(context).size;
+          final ovalWidth = size.width * 0.4;
+          final ovalHeight = size.height * 0.3;
+          final imageSize = size.width * 0.55;
+          return Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            body: SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: SizedBox(
+                        width: imageSize,
+                        height: ovalHeight,
+                        child: Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: [
+                            Center(
+                              child: Container(
+                                width: ovalWidth,
+                                height: ovalHeight,
+                                decoration: BoxDecoration(
+                                  color: color,
+                                  borderRadius: BorderRadius.circular(ovalWidth / 2),
+                                ),
+                              ),
+                            ),
+                            Hero(
+                              tag: widget.pokemon.heroTag,
+                              child: Image.network(
+                                widget.pokemon.gifUrl ?? widget.pokemon.imageUrl,
+                                width: imageSize,
+                                height: imageSize,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: size.height * 0.35),
+                ],
+              ),
+            ),
+          );
         }
         if (snapshot.hasError) {
           return Scaffold(
@@ -55,6 +101,7 @@ class _DetailScreenState extends State<DetailScreen> {
         return _DetailView(
           detail: snapshot.data!,
           isFavorite: _isFavorite,
+          heroTag: widget.pokemon.heroTag,
           onFavoriteTap: () => _toggleFavorite(snapshot.data!),
         );
       },
@@ -66,11 +113,13 @@ class _DetailView extends StatelessWidget {
   final PokemonDetail detail;
   final bool isFavorite;
   final VoidCallback onFavoriteTap;
+  final String heroTag;
 
   const _DetailView({
     required this.detail,
     required this.isFavorite,
     required this.onFavoriteTap,
+    required this.heroTag,
   });
 
   static const _visibleStats = {'hp', 'attack', 'speed'};
@@ -79,9 +128,9 @@ class _DetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = TypeChip.colorForType(detail.primaryType);
     final size = MediaQuery.of(context).size;
-    final ovalWidth = size.width * 0.6;
-    final ovalHeight = size.height * 0.5;
-    final imageSize = size.width * 1.0;
+    final ovalWidth = size.width * 0.4;
+    final ovalHeight = size.height * 0.3;
+    final imageSize = size.width * 0.55;
     final name = detail.name[0].toUpperCase() + detail.name.substring(1);
 
     return Scaffold(
@@ -109,13 +158,16 @@ class _DetailView extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Image.network(
-                            detail.imageUrl,
-                            width: imageSize,
-                            height: imageSize,
-                            fit: BoxFit.contain,
-                            errorBuilder: (context, error, stack) =>
-                                const Icon(Icons.catching_pokemon, size: 120),
+                          Hero(
+                            tag: heroTag,
+                            child: Image.network(
+                              detail.gifUrl ?? detail.imageUrl,
+                              width: imageSize,
+                              height: imageSize,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stack) =>
+                                  const Icon(Icons.catching_pokemon, size: 120),
+                            ),
                           ),
                         ],
                       ),

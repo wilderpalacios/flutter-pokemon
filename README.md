@@ -4,6 +4,10 @@ Aplicación móvil desarrollada en Flutter que consume la [PokéAPI](https://pok
 
 Desarrollada como proyecto del Bootcamp **Flutter Essentials** impartido por el Profesor Pablo Chaves de [Knot Academy](https://knotacademy.com.co/).
 
+<p align="center">
+  <img src="assets/screenshots/demo.gif" width="260"/>
+</p>
+
 ## Screenshots
 
 <table>

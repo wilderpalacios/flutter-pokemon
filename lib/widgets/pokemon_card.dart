@@ -46,11 +46,14 @@ class PokemonCard extends StatelessWidget {
                     : Theme.of(context).colorScheme.surfaceContainerHighest,
                 width: double.infinity,
                 height: 130,
-                child: Image.network(
-                  pokemon.imageUrl,
-                  fit: BoxFit.contain,
-                  errorBuilder: (context, error, stack) =>
-                      const Icon(Icons.catching_pokemon, size: 60),
+                child: Hero(
+                  tag: pokemon.heroTag,
+                  child: Image.network(
+                    pokemon.imageUrl,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stack) =>
+                        const Icon(Icons.catching_pokemon, size: 60),
+                  ),
                 ),
               ),
             ),

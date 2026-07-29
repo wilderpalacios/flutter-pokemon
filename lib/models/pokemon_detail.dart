@@ -4,6 +4,7 @@ class PokemonDetail {
   final int id;
   final String name;
   final String imageUrl;
+  final String? gifUrl;
   final List<String> types;
   final List<PokemonStat> stats;
 
@@ -11,16 +12,19 @@ class PokemonDetail {
     required this.id,
     required this.name,
     required this.imageUrl,
+    this.gifUrl,
     required this.types,
     required this.stats,
   });
 
   factory PokemonDetail.fromJson(Map<String, dynamic> json) {
+    final showdown = json['sprites']['other']['showdown'] as Map<String, dynamic>?;
     return PokemonDetail(
       id: json['id'] as int,
       name: json['name'] as String,
       imageUrl:
           json['sprites']['other']['official-artwork']['front_default'] as String? ?? '',
+      gifUrl: showdown?['front_default'] as String?,
       types: (json['types'] as List)
           .map((t) => t['type']['name'] as String)
           .toList(),

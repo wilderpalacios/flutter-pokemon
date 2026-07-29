@@ -36,7 +36,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         id: p.id,
         name: p.name,
         imageUrl: p.imageUrl,
+        gifUrl: null,
         type: p.primaryType,
+        heroTag: 'fav-${p.id}',
       );
 
   @override
